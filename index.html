@@ -1,0 +1,2978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Employee Management System</title>
+
+<style>
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --sidebar: #172554;
+    --background: #f4f7fb;
+    --card: #ffffff;
+    --text: #172033;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --success: #16a34a;
+    --danger: #dc2626;
+    --warning: #d97706;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    transition: 0.3s;
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+body.dark {
+    --background: #111827;
+    --card: #1f2937;
+    --text: #f9fafb;
+    --muted: #9ca3af;
+    --border: #374151;
+}
+
+
+/* =========================================================
+   SIDEBAR
+========================================================= */
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    width: 245px;
+    height: 100vh;
+
+    background: var(--sidebar);
+    color: white;
+
+    padding: 25px 18px;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 10;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.logo-icon {
+    width: 55px;
+    height: 55px;
+
+    background: #2563eb;
+
+    border-radius: 14px;
+
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 25px;
+    font-weight: bold;
+
+    margin-bottom: 10px;
+}
+
+.logo h2 {
+    font-size: 24px;
+}
+
+.logo p {
+    font-size: 12px;
+    opacity: 0.7;
+    margin-top: 4px;
+}
+
+.menu-title {
+    font-size: 11px;
+    color: #93c5fd;
+
+    margin: 15px 10px 8px;
+
+    text-transform: uppercase;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #dbeafe;
+
+    padding: 13px 14px;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+nav a:hover,
+nav a.active {
+    background: #2563eb;
+    color: white;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+}
+
+.sidebar-bottom button {
+    width: 100%;
+
+    border: none;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    color: white;
+
+    background: #dc2626;
+
+    font-size: 14px;
+}
+
+
+/* =========================================================
+   MAIN
+========================================================= */
+
+.main {
+    margin-left: 245px;
+
+    padding: 30px;
+
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   TOP HEADER
+========================================================= */
+
+.topbar {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 28px;
+}
+
+.page-title h1 {
+    font-size: 30px;
+    margin-bottom: 6px;
+}
+
+.page-title p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.icon-button {
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid var(--border);
+
+    background: var(--card);
+
+    color: var(--text);
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-size: 18px;
+}
+
+.admin {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    background: var(--card);
+
+    padding: 8px 13px;
+
+    border-radius: 10px;
+
+    border: 1px solid var(--border);
+}
+
+.admin-avatar {
+    width: 35px;
+    height: 35px;
+
+    border-radius: 50%;
+
+    background: #dbeafe;
+
+    color: #1d4ed8;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+}
+
+.admin small {
+    color: var(--muted);
+
+    display: block;
+
+    margin-top: 2px;
+}
+
+
+/* =========================================================
+   DASHBOARD CARDS
+========================================================= */
+
+.stats {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.stat-card {
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 12px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+
+    background: #dbeafe;
+}
+
+.stat-info p {
+    color: var(--muted);
+
+    font-size: 13px;
+
+    margin-bottom: 5px;
+}
+
+.stat-info h2 {
+    font-size: 24px;
+}
+
+
+/* =========================================================
+   PAYROLL CARD
+========================================================= */
+
+.payroll {
+    background: linear-gradient(135deg, #1d4ed8, #2563eb);
+
+    color: white;
+
+    border-radius: 14px;
+
+    padding: 22px;
+
+    margin-bottom: 22px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    box-shadow: 0 8px 20px rgba(37,99,235,0.2);
+}
+
+.payroll p {
+    opacity: 0.8;
+
+    font-size: 13px;
+
+    margin-bottom: 7px;
+}
+
+.payroll h2 {
+    font-size: 27px;
+}
+
+.payroll span {
+    font-size: 38px;
+}
+
+
+/* =========================================================
+   MAIN CARD
+========================================================= */
+
+.content-card {
+    background: var(--card);
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    padding: 24px;
+
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.card-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.card-header h2 {
+    font-size: 21px;
+
+    margin-bottom: 5px;
+}
+
+.card-header p {
+    color: var(--muted);
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.primary-btn {
+    border: none;
+
+    background: var(--primary);
+
+    color: white;
+
+    padding: 11px 17px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+.primary-btn:hover {
+    background: var(--primary-dark);
+}
+
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
+
+.toolbar {
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 20px;
+}
+
+.search {
+    flex: 1;
+
+    position: relative;
+}
+
+.search input {
+    width: 100%;
+
+    padding: 12px 15px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    outline: none;
+
+    background: var(--card);
+
+    color: var(--text);
+}
+
+.search input:focus {
+    border-color: var(--primary);
+}
+
+.filter {
+    padding: 12px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    background: var(--card);
+
+    color: var(--text);
+
+    outline: none;
+}
+
+.export-btn {
+    padding: 12px 16px;
+
+    background: #16a34a;
+
+    color: white;
+
+    border: none;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+thead {
+    background: var(--background);
+}
+
+th {
+    text-align: left;
+
+    padding: 14px;
+
+    font-size: 12px;
+
+    color: var(--muted);
+
+    text-transform: uppercase;
+}
+
+td {
+    padding: 14px;
+
+    border-top: 1px solid var(--border);
+
+    font-size: 14px;
+}
+
+tbody tr {
+    transition: 0.2s;
+}
+
+tbody tr:hover {
+    background: var(--background);
+}
+
+
+/* =========================================================
+   EMPLOYEE NAME
+========================================================= */
+
+.employee-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    background: #dbeafe;
+
+    color: #1d4ed8;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-weight: bold;
+}
+
+.employee-info small {
+    display: block;
+
+    color: var(--muted);
+
+    margin-top: 3px;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+.status {
+    padding: 5px 10px;
+
+    border-radius: 20px;
+
+    font-size: 11px;
+
+    font-weight: bold;
+}
+
+.status.active {
+    background: #dcfce7;
+
+    color: #15803d;
+}
+
+.status.leave {
+    background: #fef3c7;
+
+    color: #b45309;
+}
+
+.status.inactive {
+    background: #fee2e2;
+
+    color: #b91c1c;
+}
+
+.attendance-select {
+    min-width: 130px;
+    padding: 9px;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    background: var(--card);
+    color: var(--text);
+}
+
+.attendance-summary {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.attendance-summary-card {
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--background);
+}
+
+.attendance-summary-card p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.attendance-summary-card strong {
+    font-size: 22px;
+}
+
+.attendance-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.attendance-actions input {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--text);
+}
+
+.attendance-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+========================================================= */
+
+.edit-btn,
+.delete-btn {
+    border: none;
+
+    padding: 7px 10px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    margin-right: 4px;
+}
+
+.edit-btn {
+    background: #dbeafe;
+
+    color: #1d4ed8;
+}
+
+.delete-btn {
+    background: #fee2e2;
+
+    color: #dc2626;
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal {
+    display: none;
+
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0,0,0,0.55);
+
+    z-index: 100;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: 100%;
+
+    max-width: 650px;
+
+    background: var(--card);
+
+    color: var(--text);
+
+    border-radius: 15px;
+
+    padding: 25px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.close {
+    border: none;
+
+    background: none;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   FORM
+========================================================= */
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 13px;
+
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    padding: 11px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 7px;
+
+    outline: none;
+
+    background: var(--card);
+
+    color: var(--text);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: var(--primary);
+}
+
+.form-buttons {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+.cancel-btn {
+    border: none;
+
+    background: #6b7280;
+
+    color: white;
+
+    padding: 11px 17px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+.toast {
+    position: fixed;
+
+    right: 25px;
+
+    bottom: 25px;
+
+    background: #111827;
+
+    color: white;
+
+    padding: 14px 20px;
+
+    border-radius: 8px;
+
+    display: none;
+
+    z-index: 200;
+
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+.toast.show {
+    display: block;
+
+    animation: toastIn 0.3s ease;
+}
+
+@keyframes toastIn {
+
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+}
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty {
+    text-align: center;
+
+    padding: 35px;
+
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 1100px) {
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media(max-width: 750px) {
+
+    .sidebar {
+        width: 190px;
+    }
+
+    .main {
+        margin-left: 190px;
+
+        padding: 20px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .toolbar {
+        flex-direction: column;
+    }
+
+    .attendance-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .attendance-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .attendance-actions {
+        flex-wrap: wrap;
+    }
+
+    .topbar {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 15px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside class="sidebar">
+
+    <div class="logo">
+
+        <div class="logo-icon">
+            EMS
+        </div>
+
+        <h2>Employee System</h2>
+
+        <p>Management Dashboard</p>
+
+    </div>
+
+
+    <div class="menu-title">
+        Main Menu
+    </div>
+
+
+    <nav>
+
+        <a href="#" class="active">
+            🏠 Dashboard
+        </a>
+
+        <a href="#employees">
+            👥 Employees
+        </a>
+
+        <a href="#attendance">
+            🗓️ Attendance
+        </a>
+
+        <a href="#" onclick="openAddModal()">
+            ➕ Add Employee
+        </a>
+
+        <a href="#employees">
+            🔍 Search Employee
+        </a>
+
+    </nav>
+
+
+    <div class="menu-title">
+        Settings
+    </div>
+
+
+    <nav>
+
+        <a href="#" onclick="toggleDarkMode()">
+            🌙 Dark Mode
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <button onclick="logout()">
+            🚪 Logout
+        </button>
+
+    </div>
+
+</aside>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="main">
+
+
+    <!-- TOP BAR -->
+
+    <div class="topbar">
+
+        <div class="page-title">
+
+            <h1>Dashboard</h1>
+
+            <p>
+                Manage your organization's employees easily.
+            </p>
+
+        </div>
+
+
+        <div class="top-actions">
+
+            <button
+                class="icon-button"
+                onclick="toggleDarkMode()"
+                title="Dark Mode"
+            >
+                🌙
+            </button>
+
+
+            <div class="admin">
+
+                <div class="admin-avatar">
+                    A
+                </div>
+
+                <div>
+
+                    <strong>Admin</strong>
+
+                    <small>
+                        Administrator
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =================================================
+         STATISTICS
+    ================================================= -->
+
+    <section class="stats">
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                👥
+            </div>
+
+            <div class="stat-info">
+
+                <p>
+                    Total Employees
+                </p>
+
+                <h2 id="totalEmployees">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🟢
+            </div>
+
+            <div class="stat-info">
+
+                <p>
+                    Active Employees
+                </p>
+
+                <h2 id="activeEmployees">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🏖️
+            </div>
+
+            <div class="stat-info">
+
+                <p>
+                    On Leave
+                </p>
+
+                <h2 id="leaveEmployees">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🏢
+            </div>
+
+            <div class="stat-info">
+
+                <p>
+                    Departments
+                </p>
+
+                <h2 id="departmentCount">
+                    0
+                </h2>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         PAYROLL
+    ================================================= -->
+
+    <section class="payroll">
+
+        <div>
+
+            <p>
+                TOTAL MONTHLY PAYROLL
+            </p>
+
+            <h2 id="totalPayroll">
+                ₹0
+            </h2>
+
+        </div>
+
+        <span>
+            💰
+        </span>
+
+    </section>
+
+
+
+    <!-- =================================================
+         EMPLOYEE TABLE
+    ================================================= -->
+
+    <section
+        class="content-card"
+        id="employees"
+    >
+
+
+        <div class="card-header">
+
+            <div>
+
+                <h2>
+                    Employee Directory
+                </h2>
+
+                <p>
+                    View and manage all employee records.
+                </p>
+
+            </div>
+
+
+            <button
+                class="primary-btn"
+                onclick="openAddModal()"
+            >
+                + Add Employee
+            </button>
+
+        </div>
+
+
+
+        <!-- TOOLBAR -->
+
+        <div class="toolbar">
+
+
+            <div class="search">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search by name, ID, department..."
+                    oninput="displayEmployees()"
+                >
+
+            </div>
+
+
+            <select
+                class="filter"
+                id="departmentFilter"
+                onchange="displayEmployees()"
+            >
+
+                <option value="all">
+                    All Departments
+                </option>
+
+                <option value="IT">
+                    IT
+                </option>
+
+                <option value="HR">
+                    HR
+                </option>
+
+                <option value="Finance">
+                    Finance
+                </option>
+
+                <option value="Marketing">
+                    Marketing
+                </option>
+
+                <option value="Operations">
+                    Operations
+                </option>
+
+            </select>
+
+
+            <select
+                class="filter"
+                id="statusFilter"
+                onchange="displayEmployees()"
+            >
+
+                <option value="all">
+                    All Status
+                </option>
+
+                <option value="Active">
+                    Active
+                </option>
+
+                <option value="On Leave">
+                    On Leave
+                </option>
+
+                <option value="Inactive">
+                    Inactive
+                </option>
+
+            </select>
+
+
+            <button
+                class="export-btn"
+                onclick="exportCSV()"
+            >
+                📥 Export
+            </button>
+
+
+        </div>
+
+
+
+        <!-- TABLE -->
+
+        <div class="table-container">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Employee
+                        </th>
+
+                        <th>
+                            Department
+                        </th>
+
+                        <th>
+                            Position
+                        </th>
+
+                        <th>
+                            Salary
+                        </th>
+
+                        <th>
+                            Joining Date
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="employeeTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </section>
+
+    <!-- =================================================
+         ATTENDANCE
+    ================================================= -->
+
+    <section class="content-card" id="attendance" style="margin-top: 22px;">
+
+        <div class="card-header">
+
+            <div>
+                <h2>Attendance</h2>
+                <p>Record and review daily employee attendance.</p>
+            </div>
+
+        </div>
+
+        <div class="attendance-summary">
+            <div class="attendance-summary-card">
+                <p>Present</p>
+                <strong id="attendancePresent">0</strong>
+            </div>
+            <div class="attendance-summary-card">
+                <p>Absent</p>
+                <strong id="attendanceAbsent">0</strong>
+            </div>
+            <div class="attendance-summary-card">
+                <p>Late</p>
+                <strong id="attendanceLate">0</strong>
+            </div>
+            <div class="attendance-summary-card">
+                <p>On Leave</p>
+                <strong id="attendanceLeave">0</strong>
+            </div>
+            <div class="attendance-summary-card">
+                <p>Not Marked</p>
+                <strong id="attendanceUnmarked">0</strong>
+            </div>
+        </div>
+
+        <div class="attendance-toolbar">
+            <div>
+                <strong id="attendanceDateLabel"></strong>
+                <p style="color: var(--muted); font-size: 13px; margin-top: 4px;">
+                    Attendance is saved separately for each date.
+                </p>
+            </div>
+
+            <div class="attendance-actions">
+                <input
+                    type="date"
+                    id="attendanceDate"
+                    aria-label="Attendance date"
+                    onchange="displayAttendance()"
+                >
+                <button class="edit-btn" onclick="markAllPresent()">Mark All Present</button>
+                <button class="primary-btn" onclick="saveAttendance()">Save Attendance</button>
+                <button class="export-btn" onclick="exportAttendanceCSV()">📥 Export CSV</button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Department</th>
+                        <th>Attendance Status</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceTable"></tbody>
+            </table>
+        </div>
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     ADD / EDIT MODAL
+===================================================== -->
+
+<div
+    class="modal"
+    id="employeeModal"
+>
+
+
+    <div class="modal-box">
+
+
+        <div class="modal-header">
+
+            <h2 id="modalTitle">
+                Add New Employee
+            </h2>
+
+            <button
+                class="close"
+                onclick="closeModal()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+
+        <form
+            id="employeeForm"
+            onsubmit="saveEmployee(event)"
+        >
+
+
+            <div class="form-grid">
+
+
+                <!-- Employee ID -->
+
+                <div class="form-group">
+
+                    <label>
+                        Employee ID
+                    </label>
+
+                    <input
+                        type="text"
+                        id="employeeId"
+                        readonly
+                    >
+
+                </div>
+
+
+                <!-- Name -->
+
+                <div class="form-group">
+
+                    <label>
+                        Full Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="employeeName"
+                        placeholder="Enter full name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Department -->
+
+                <div class="form-group">
+
+                    <label>
+                        Department *
+                    </label>
+
+                    <select
+                        id="employeeDepartment"
+                        required
+                    >
+
+                        <option value="">
+                            Select Department
+                        </option>
+
+                        <option value="IT">
+                            IT
+                        </option>
+
+                        <option value="HR">
+                            HR
+                        </option>
+
+                        <option value="Finance">
+                            Finance
+                        </option>
+
+                        <option value="Marketing">
+                            Marketing
+                        </option>
+
+                        <option value="Operations">
+                            Operations
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Position -->
+
+                <div class="form-group">
+
+                    <label>
+                        Position *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="employeePosition"
+                        placeholder="e.g. Software Developer"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Salary -->
+
+                <div class="form-group">
+
+                    <label>
+                        Monthly Salary (₹) *
+                    </label>
+
+                    <input
+                        type="number"
+                        id="employeeSalary"
+                        placeholder="30000"
+                        min="0"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Joining Date -->
+
+                <div class="form-group">
+
+                    <label>
+                        Joining Date *
+                    </label>
+
+                    <input
+                        type="date"
+                        id="employeeDate"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- Status -->
+
+                <div class="form-group">
+
+                    <label>
+                        Status *
+                    </label>
+
+                    <select
+                        id="employeeStatus"
+                        required
+                    >
+
+                        <option value="Active">
+                            Active
+                        </option>
+
+                        <option value="On Leave">
+                            On Leave
+                        </option>
+
+                        <option value="Inactive">
+                            Inactive
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+            </div>
+
+
+
+            <div class="form-buttons">
+
+                <button
+                    type="button"
+                    class="cancel-btn"
+                    onclick="closeModal()"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                >
+                    Save Employee
+                </button>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =====================================================
+     TOAST
+===================================================== -->
+
+<div
+    class="toast"
+    id="toast"
+>
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   DATA
+========================================================= */
+
+
+/*
+    Get employee data from Local Storage.
+
+    If there is no saved data, create some sample employees.
+*/
+
+let employees =
+    JSON.parse(localStorage.getItem("employees")) || [
+
+        {
+            id: "EMP001",
+            name: "Rahul Patel",
+            department: "IT",
+            position: "Developer",
+            salary: 30000,
+            date: "2025-06-15",
+            status: "Active"
+        },
+
+        {
+            id: "EMP002",
+            name: "Priya Shah",
+            department: "HR",
+            position: "HR Manager",
+            salary: 35000,
+            date: "2024-08-10",
+            status: "Active"
+        },
+
+        {
+            id: "EMP003",
+            name: "Amit Patel",
+            department: "Finance",
+            position: "Accountant",
+            salary: 28000,
+            date: "2025-01-20",
+            status: "On Leave"
+        },
+
+        {
+            id: "EMP004",
+            name: "Neha Mehta",
+            department: "Marketing",
+            position: "Marketing Executive",
+            salary: 32000,
+            date: "2025-03-12",
+            status: "Active"
+        }
+
+    ];
+
+let attendanceRecords =
+    JSON.parse(localStorage.getItem("attendanceRecords")) || {};
+
+
+/* Save data */
+
+function saveToStorage() {
+
+    localStorage.setItem(
+        "employees",
+        JSON.stringify(employees)
+    );
+
+}
+
+function getLocalDateString(date) {
+
+    let year = date.getFullYear();
+    let month = String(date.getMonth() + 1).padStart(2, "0");
+    let day = String(date.getDate()).padStart(2, "0");
+
+    return year + "-" + month + "-" + day;
+
+}
+
+
+/* =========================================================
+   ATTENDANCE
+========================================================= */
+
+function displayAttendance() {
+
+    let date =
+        document.getElementById("attendanceDate").value;
+
+    let table =
+        document.getElementById("attendanceTable");
+
+    let activeEmployees =
+        employees.filter(employee => employee.status === "Active");
+
+    let dayRecords =
+        attendanceRecords[date] || {};
+
+    table.innerHTML = "";
+
+    document.getElementById("attendanceDateLabel").textContent =
+        date ? formatDate(date) : "Select a date";
+
+    if (activeEmployees.length === 0) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="3" class="empty">No active employees to mark.</td>
+            </tr>
+        `;
+    }
+
+    activeEmployees.forEach(function(employee) {
+
+        let status = dayRecords[employee.id] || "";
+        let row = document.createElement("tr");
+
+        let employeeCell = document.createElement("td");
+        let employeeInfo = document.createElement("div");
+        employeeInfo.className = "employee-info";
+
+        let avatar = document.createElement("div");
+        avatar.className = "avatar";
+        avatar.textContent = employee.name
+            .split(" ")
+            .map(word => word[0])
+            .join("")
+            .substring(0, 2)
+            .toUpperCase();
+
+        let identity = document.createElement("div");
+        let name = document.createElement("strong");
+        name.textContent = employee.name;
+        let id = document.createElement("small");
+        id.textContent = employee.id;
+        identity.append(name, id);
+        employeeInfo.append(avatar, identity);
+        employeeCell.appendChild(employeeInfo);
+
+        let department = document.createElement("td");
+        department.textContent = employee.department;
+
+        let statusCell = document.createElement("td");
+        let select = document.createElement("select");
+        select.className = "attendance-select";
+        select.dataset.employeeId = employee.id;
+        select.setAttribute("aria-label", "Attendance status for " + employee.name);
+        select.setAttribute("onchange", "updateAttendanceSummary()");
+
+        [
+            ["", "Not Marked"],
+            ["Present", "Present"],
+            ["Absent", "Absent"],
+            ["Late", "Late"],
+            ["On Leave", "On Leave"]
+        ].forEach(function(optionData) {
+            let option = document.createElement("option");
+            option.value = optionData[0];
+            option.textContent = optionData[1];
+            option.selected = status === optionData[0];
+            select.appendChild(option);
+        });
+
+        statusCell.appendChild(select);
+        row.append(employeeCell, department, statusCell);
+
+        table.appendChild(row);
+
+    });
+
+    updateAttendanceSummary();
+
+}
+
+
+function updateAttendanceSummary() {
+
+    let counts = {
+        "Present": 0,
+        "Absent": 0,
+        "Late": 0,
+        "On Leave": 0,
+        "Not Marked": 0
+    };
+
+    document.querySelectorAll(".attendance-select").forEach(function(select) {
+        counts[select.value || "Not Marked"] += 1;
+    });
+
+    document.getElementById("attendancePresent").textContent = counts.Present;
+    document.getElementById("attendanceAbsent").textContent = counts.Absent;
+    document.getElementById("attendanceLate").textContent = counts.Late;
+    document.getElementById("attendanceLeave").textContent = counts["On Leave"];
+    document.getElementById("attendanceUnmarked").textContent = counts["Not Marked"];
+
+}
+
+
+function saveAttendance() {
+
+    let date =
+        document.getElementById("attendanceDate").value;
+
+    if (!date) {
+        showToast("Please select an attendance date.");
+        return;
+    }
+
+    let dayRecords = Object.assign({}, attendanceRecords[date] || {});
+
+    document.querySelectorAll(".attendance-select").forEach(function(select) {
+        if (select.value) {
+            dayRecords[select.dataset.employeeId] = select.value;
+        } else {
+            delete dayRecords[select.dataset.employeeId];
+        }
+    });
+
+    attendanceRecords[date] = dayRecords;
+
+    localStorage.setItem(
+        "attendanceRecords",
+        JSON.stringify(attendanceRecords)
+    );
+
+    displayAttendance();
+    showToast("Attendance saved for " + formatDate(date) + ".");
+
+}
+
+
+function markAllPresent() {
+
+    document.querySelectorAll(".attendance-select").forEach(function(select) {
+        select.value = "Present";
+    });
+
+    updateAttendanceSummary();
+
+}
+
+
+function exportAttendanceCSV() {
+
+    let date =
+        document.getElementById("attendanceDate").value;
+
+    if (!date) {
+        showToast("Please select an attendance date.");
+        return;
+    }
+
+    let dayRecords =
+        attendanceRecords[date] || {};
+
+    let csv = "Date,Employee ID,Name,Department,Attendance Status\n";
+
+    employees
+        .filter(employee => employee.status === "Active")
+        .forEach(function(employee) {
+            let values = [
+                date,
+                employee.id,
+                employee.name,
+                employee.department,
+                dayRecords[employee.id] || "Not Marked"
+            ];
+
+            csv += values.map(value =>
+                '"' + String(value).replace(/"/g, '""') + '"'
+            ).join(",") + "\n";
+        });
+
+    let blob = new Blob([csv], { type: "text/csv" });
+    let url = URL.createObjectURL(blob);
+    let link = document.createElement("a");
+
+    link.href = url;
+    link.download = "attendance_" + date + ".csv";
+    link.click();
+    URL.revokeObjectURL(url);
+
+    showToast("Attendance exported successfully.");
+
+}
+
+
+/* =========================================================
+   CURRENCY FORMAT
+========================================================= */
+
+
+/*
+    This is the important part for your
+    salary comma problem.
+
+    Example:
+
+    30000
+    becomes
+
+    ₹30,000
+
+    120000
+    becomes
+
+    ₹1,20,000
+*/
+
+function formatSalary(amount) {
+
+    return new Intl.NumberFormat(
+        "en-IN",
+        {
+            style: "currency",
+            currency: "INR",
+            maximumFractionDigits: 0
+        }
+    ).format(Number(amount));
+
+}
+
+
+/* =========================================================
+   DISPLAY EMPLOYEES
+========================================================= */
+
+function displayEmployees() {
+
+    let table =
+        document.getElementById("employeeTable");
+
+
+    let search =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+
+    let department =
+        document
+        .getElementById("departmentFilter")
+        .value;
+
+
+    let status =
+        document
+        .getElementById("statusFilter")
+        .value;
+
+
+    let filtered =
+        employees.filter(function(employee) {
+
+
+            let matchesSearch =
+
+                employee.name
+                .toLowerCase()
+                .includes(search)
+
+                ||
+
+                employee.id
+                .toLowerCase()
+                .includes(search)
+
+                ||
+
+                employee.department
+                .toLowerCase()
+                .includes(search);
+
+
+            let matchesDepartment =
+
+                department === "all"
+
+                ||
+
+                employee.department === department;
+
+
+            let matchesStatus =
+
+                status === "all"
+
+                ||
+
+                employee.status === status;
+
+
+            return (
+                matchesSearch &&
+                matchesDepartment &&
+                matchesStatus
+            );
+
+        });
+
+
+    table.innerHTML = "";
+
+
+    if (filtered.length === 0) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="empty"
+                >
+
+                    🔍 No employees found.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    filtered.forEach(function(employee) {
+
+
+        let initials =
+            employee.name
+            .split(" ")
+            .map(word => word[0])
+            .join("")
+            .substring(0,2)
+            .toUpperCase();
+
+
+        let statusClass = "";
+
+
+        if (employee.status === "Active") {
+
+            statusClass = "active";
+
+        }
+
+        else if (employee.status === "On Leave") {
+
+            statusClass = "leave";
+
+        }
+
+        else {
+
+            statusClass = "inactive";
+
+        }
+
+
+        table.innerHTML += `
+
+            <tr>
+
+                <td>
+
+                    <div class="employee-info">
+
+                        <div class="avatar">
+                            ${initials}
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                ${employee.name}
+                            </strong>
+
+                            <small>
+                                ${employee.id}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                </td>
+
+
+                <td>
+                    ${employee.department}
+                </td>
+
+
+                <td>
+                    ${employee.position}
+                </td>
+
+
+                <td>
+                    <strong>
+                        ${formatSalary(employee.salary)}
+                    </strong>
+                </td>
+
+
+                <td>
+                    ${formatDate(employee.date)}
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="status ${statusClass}"
+                    >
+                        ${employee.status}
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    <button
+                        class="edit-btn"
+                        onclick="editEmployee('${employee.id}')"
+                    >
+                        Edit
+                    </button>
+
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteEmployee('${employee.id}')"
+                    >
+                        Delete
+                    </button>
+
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+========================================================= */
+
+function formatDate(date) {
+
+    if (!date) {
+        return "-";
+    }
+
+
+    let d =
+        new Date(date);
+
+
+    return d.toLocaleDateString(
+        "en-IN",
+        {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DASHBOARD STATISTICS
+========================================================= */
+
+function updateDashboard() {
+
+
+    document.getElementById(
+        "totalEmployees"
+    ).innerText =
+        employees.length;
+
+
+    let active =
+        employees.filter(
+            employee =>
+                employee.status === "Active"
+        ).length;
+
+
+    let leave =
+        employees.filter(
+            employee =>
+                employee.status === "On Leave"
+        ).length;
+
+
+    let departments =
+        new Set(
+            employees.map(
+                employee =>
+                    employee.department
+            )
+        );
+
+
+    let payroll =
+        employees.reduce(
+            function(total, employee) {
+
+                return total +
+                    Number(employee.salary);
+
+            },
+            0
+        );
+
+
+    document.getElementById(
+        "activeEmployees"
+    ).innerText =
+        active;
+
+
+    document.getElementById(
+        "leaveEmployees"
+    ).innerText =
+        leave;
+
+
+    document.getElementById(
+        "departmentCount"
+    ).innerText =
+        departments.size;
+
+
+    document.getElementById(
+        "totalPayroll"
+    ).innerText =
+        formatSalary(payroll);
+
+}
+
+
+/* =========================================================
+   OPEN ADD MODAL
+========================================================= */
+
+function openAddModal() {
+
+
+    document
+    .getElementById("employeeModal")
+    .classList.add("show");
+
+
+    document
+    .getElementById("modalTitle")
+    .innerText =
+        "Add New Employee";
+
+
+    document
+    .getElementById("employeeForm")
+    .reset();
+
+
+    document
+    .getElementById("employeeId")
+    .value =
+        generateEmployeeID();
+
+
+    document
+    .getElementById("employeeDate")
+    .value =
+        new Date()
+        .toISOString()
+        .split("T")[0];
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
+
+function closeModal() {
+
+    document
+    .getElementById("employeeModal")
+    .classList.remove("show");
+
+}
+
+
+/* =========================================================
+   GENERATE EMPLOYEE ID
+========================================================= */
+
+function generateEmployeeID() {
+
+    let maxNumber = 0;
+
+
+    employees.forEach(function(employee) {
+
+        let number =
+            parseInt(
+                employee.id.replace("EMP", "")
+            );
+
+
+        if (number > maxNumber) {
+
+            maxNumber = number;
+
+        }
+
+    });
+
+
+    let nextNumber =
+        maxNumber + 1;
+
+
+    return "EMP" +
+        String(nextNumber).padStart(3, "0");
+
+}
+
+
+/* =========================================================
+   SAVE EMPLOYEE
+========================================================= */
+
+function saveEmployee(event) {
+
+    event.preventDefault();
+
+
+    let id =
+        document
+        .getElementById("employeeId")
+        .value;
+
+
+    let name =
+        document
+        .getElementById("employeeName")
+        .value
+        .trim();
+
+
+    let department =
+        document
+        .getElementById("employeeDepartment")
+        .value;
+
+
+    let position =
+        document
+        .getElementById("employeePosition")
+        .value
+        .trim();
+
+
+    let salary =
+        Number(
+            document
+            .getElementById("employeeSalary")
+            .value
+        );
+
+
+    let date =
+        document
+        .getElementById("employeeDate")
+        .value;
+
+
+    let status =
+        document
+        .getElementById("employeeStatus")
+        .value;
+
+
+    if (
+        !name ||
+        !department ||
+        !position ||
+        !salary ||
+        !date
+    ) {
+
+        showToast(
+            "Please fill all required fields."
+        );
+
+        return;
+
+    }
+
+
+    let existingIndex =
+        employees.findIndex(
+            employee =>
+                employee.id === id
+        );
+
+
+    let employeeData = {
+
+        id: id,
+
+        name: name,
+
+        department: department,
+
+        position: position,
+
+        salary: salary,
+
+        date: date,
+
+        status: status
+
+    };
+
+
+    if (existingIndex !== -1) {
+
+
+        /*
+            EDIT EXISTING EMPLOYEE
+        */
+
+        employees[existingIndex] =
+            employeeData;
+
+
+        showToast(
+            "Employee updated successfully!"
+        );
+
+    }
+
+    else {
+
+
+        /*
+            ADD NEW EMPLOYEE
+        */
+
+        employees.push(
+            employeeData
+        );
+
+
+        showToast(
+            "Employee added successfully!"
+        );
+
+    }
+
+
+    saveToStorage();
+
+    displayEmployees();
+
+    updateDashboard();
+
+    closeModal();
+
+}
+
+
+/* =========================================================
+   EDIT EMPLOYEE
+========================================================= */
+
+function editEmployee(id) {
+
+
+    let employee =
+        employees.find(
+            employee =>
+                employee.id === id
+        );
+
+
+    if (!employee) {
+        return;
+    }
+
+
+    document
+    .getElementById("employeeModal")
+    .classList.add("show");
+
+
+    document
+    .getElementById("modalTitle")
+    .innerText =
+        "Edit Employee";
+
+
+    document
+    .getElementById("employeeId")
+    .value =
+        employee.id;
+
+
+    document
+    .getElementById("employeeName")
+    .value =
+        employee.name;
+
+
+    document
+    .getElementById("employeeDepartment")
+    .value =
+        employee.department;
+
+
+    document
+    .getElementById("employeePosition")
+    .value =
+        employee.position;
+
+
+    document
+    .getElementById("employeeSalary")
+    .value =
+        employee.salary;
+
+
+    document
+    .getElementById("employeeDate")
+    .value =
+        employee.date;
+
+
+    document
+    .getElementById("employeeStatus")
+    .value =
+        employee.status;
+
+}
+
+
+/* =========================================================
+   DELETE EMPLOYEE
+========================================================= */
+
+function deleteEmployee(id) {
+
+
+    let employee =
+        employees.find(
+            employee =>
+                employee.id === id
+        );
+
+
+    if (!employee) {
+        return;
+    }
+
+
+    let confirmation =
+        confirm(
+            "Delete " +
+            employee.name +
+            " from employee records?"
+        );
+
+
+    if (!confirmation) {
+        return;
+    }
+
+
+    employees =
+        employees.filter(
+            employee =>
+                employee.id !== id
+        );
+
+
+    saveToStorage();
+
+    displayEmployees();
+
+    updateDashboard();
+
+
+    showToast(
+        "Employee deleted successfully."
+    );
+
+}
+
+
+/* =========================================================
+   SEARCH RESET
+========================================================= */
+
+function resetFilters() {
+
+    document
+    .getElementById("searchInput")
+    .value = "";
+
+
+    document
+    .getElementById("departmentFilter")
+    .value = "all";
+
+
+    document
+    .getElementById("statusFilter")
+    .value = "all";
+
+
+    displayEmployees();
+
+}
+
+
+/* =========================================================
+   EXPORT CSV
+========================================================= */
+
+function exportCSV() {
+
+
+    if (employees.length === 0) {
+
+        showToast(
+            "There are no employees to export."
+        );
+
+        return;
+
+    }
+
+
+    let csv =
+
+        "Employee ID,Name,Department,Position,Salary,Joining Date,Status\n";
+
+
+    employees.forEach(function(employee) {
+
+
+        csv +=
+
+            employee.id + "," +
+
+            '"' + employee.name + '",' +
+
+            employee.department + "," +
+
+            '"' + employee.position + '",' +
+
+            employee.salary + "," +
+
+            employee.date + "," +
+
+            employee.status +
+
+            "\n";
+
+    });
+
+
+    let blob =
+        new Blob(
+            [csv],
+            {
+                type: "text/csv"
+            }
+        );
+
+
+    let url =
+        URL.createObjectURL(blob);
+
+
+    let link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+    link.download =
+        "employee_records.csv";
+
+
+    link.click();
+
+
+    URL.revokeObjectURL(url);
+
+
+    showToast(
+        "Employee data exported successfully."
+    );
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+function toggleDarkMode() {
+
+
+    document.body.classList.toggle(
+        "dark"
+    );
+
+
+    let dark =
+        document.body.classList.contains(
+            "dark"
+        );
+
+
+    localStorage.setItem(
+        "darkMode",
+        dark
+    );
+
+}
+
+
+/* Load dark mode */
+
+if (
+    localStorage.getItem("darkMode")
+    === "true"
+) {
+
+    document.body.classList.add(
+        "dark"
+    );
+
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+function showToast(message) {
+
+
+    let toast =
+        document.getElementById("toast");
+
+
+    toast.innerText =
+        message;
+
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    setTimeout(function() {
+
+        toast.classList.remove(
+            "show"
+        );
+
+    }, 2500);
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+function logout() {
+
+    alert(
+        "Logout functionality can be connected to a login system later."
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+========================================================= */
+
+document
+.getElementById("employeeModal")
+.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target === this
+        ) {
+
+            closeModal();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   INITIAL LOAD
+========================================================= */
+
+displayEmployees();
+
+updateDashboard();
+
+document.getElementById("attendanceDate").value =
+    getLocalDateString(new Date());
+
+displayAttendance();
+
+</script>
+
+</body>
+</html>
